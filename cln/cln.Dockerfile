@@ -1,6 +1,6 @@
 
 # Stage 1: Build the hold plugin using CLN base to match glibc
-FROM docker.io/elementsproject/lightningd:v25.04.1 AS builder
+FROM docker.io/elementsproject/lightningd:v26.04.1 AS builder
 
 ENV RUSTUP_TOOLCHAIN_VERSION=1.89 \
     PATH=/root/.cargo/bin:${PATH}
