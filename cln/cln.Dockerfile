@@ -1,6 +1,6 @@
 
 # Stage 1: Build the hold plugin using CLN base to match glibc
-FROM docker.io/elementsproject/lightningd:v25.12.1 AS builder
+FROM docker.io/elementsproject/lightningd:v25.04.1 AS builder
 
 ENV RUSTUP_TOOLCHAIN_VERSION=1.89 \
     PATH=/root/.cargo/bin:${PATH}
@@ -29,7 +29,7 @@ RUN git clone https://github.com/BoltzExchange/hold.git && \
 RUN mkdir -p /hold-libs && cp /usr/lib/*-linux-gnu/libsqlite3.so.0* /hold-libs/
 
 # Stage 2: Clean CLN image with only the plugin binary
-FROM docker.io/elementsproject/lightningd:v25.09.1
+FROM docker.io/elementsproject/lightningd:v26.04.1
 
 ENV NETWORK=regtest \
     BITCOIN_RPCCONNECT=bitcoind:18443 \
