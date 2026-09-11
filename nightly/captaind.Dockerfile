@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM --platform=$BUILDPLATFORM rust:1.91.1-bullseye AS builder
+FROM --platform=$BUILDPLATFORM rust:1.91.1-bookworm AS builder
 
 # Install build dependencies including cross-compilation toolchains
 RUN apt-get update && \
@@ -27,7 +27,7 @@ RUN cargo build --release --bin captaind
 
 
 # Stage 2: Create the final image
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 # Install runtime dependencies
 RUN apt-get update && \
