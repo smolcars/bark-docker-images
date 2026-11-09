@@ -1,8 +1,8 @@
 
 # Stage 1: Build the hold plugin using CLN base to match glibc
-FROM docker.io/elementsproject/lightningd:v26.04.1 AS builder
+FROM docker.io/elementsproject/lightningd:v26.06.10 AS builder
 
-ENV RUSTUP_TOOLCHAIN_VERSION=1.89 \
+ENV RUSTUP_TOOLCHAIN_VERSION=1.90 \
     PATH=/root/.cargo/bin:${PATH}
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -19,9 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
 RUN rustup toolchain install ${RUSTUP_TOOLCHAIN_VERSION}
 
-RUN git clone https://github.com/BoltzExchange/hold.git && \
+# Same hold revision captaind 0.8.1 is built and tested against.
+RUN git clone https://gitlab.com/ark-bitcoin/hold.git && \
 	cd hold && \
-	git checkout v0.3.3 && \
+	git checkout efc7d5f50470ed9d87b2b3b9c99c049da72de91a && \
 	cargo build && \
     chmod a+x /hold/target/debug/hold
 
@@ -29,7 +30,7 @@ RUN git clone https://github.com/BoltzExchange/hold.git && \
 RUN mkdir -p /hold-libs && cp /usr/lib/*-linux-gnu/libsqlite3.so.0* /hold-libs/
 
 # Stage 2: Clean CLN image with only the plugin binary
-FROM docker.io/elementsproject/lightningd:v26.04.1
+FROM docker.io/elementsproject/lightningd:v26.06.10
 
 ENV NETWORK=regtest \
     BITCOIN_RPCCONNECT=bitcoind:18443 \
